@@ -1,7 +1,10 @@
 # hidden-destinations
- This is an AR experience conceived as a guided meditation through the "Alexandru Borza" Botanical Garden of Cluj-Napoca.
+This is an AR experience conceived as a guided meditation through the "Alexandru Borza" Botanical Garden of Cluj-Napoca.
 
 Made possible with
-https://aframe.io
-https://ar-js-org.github.io/AR.js-Docs/
-https://github.com/n5ro/aframe-extras
+A-Frame: Hello WebVR https://aframe.io
+AR.js - Augmented Reality on the Web https://ar-js-org.github.io/AR.js-Docs/
+A-Frame Extras https://github.com/n5ro/aframe-extras
+
+Google Maps Platform https://cloud.google.com/maps/official
+JSFiddle - Code Playground https://jsfiddle.net/

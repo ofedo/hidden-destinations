@@ -632,7 +632,7 @@ gl_FragColor = vec4( color, opacity ) * vec4( tint, 1.0 );
           value: videoTexture
         },
         refractionRatio: {
-          value: 0.75
+          value: 0.95
         },
         distance: {
           value: 1.0
@@ -641,7 +641,7 @@ gl_FragColor = vec4( color, opacity ) * vec4( tint, 1.0 );
           value: 0.8
         },
         tint: {
-          value: new THREE.Vector3(0.1, 0.1, 0.1)
+          value: new THREE.Vector3(0.5, 0.5, 0.5)
         }
       },
       vertexShader: vertexShader,
@@ -690,8 +690,8 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   model.setAttribute('scale', scale);
   model.setAttribute('sound', 'src:./assets/audio/location' + markersIndex + '.mp3; rolloffFactor: 0.1; maxDistance: 5;');
   model.setAttribute('animation__rotation', 'property: rotation; to: 0 360 0; dur: 10000; loop: true; easing: linear;');
-  model.setAttribute('animation__scale', 'property: scale; from: 1 1 1; to: 4 4 4; dur: 10000; easing: easeInOutSine; startEvents: click;');
-  model.setAttribute('animation__opacity', 'property: model-opacity; from: 1; to: 0; dur: 10000; easing: easeInOutSine; startEvents: click;');
+  model.setAttribute('animation__scale', 'property: scale; from: 1 1 1; to: 4 4 4; dur: 10000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__opacity', 'property: model-opacity; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
 
   model.addEventListener('click', () => {
     if (!model.getAttribute('clicked')) {
@@ -749,7 +749,7 @@ function getWayPoint(point, points, markers, pointsIndex, markersIndex, doAdvanc
 
   let model = document.createElement('a-entity');
   model.setAttribute('id', 'waypoint' + pointsIndex);
-  model.setAttribute('gltf-model', '#arrow');
+  model.setAttribute('gltf-model', '#arrow' + (pointsIndex % 3 + 1));
 
   model.setAttribute('gps-entity-place', `latitude: ${point.lat}; longitude: ${point.lng};`);
 
@@ -766,7 +766,7 @@ function getWayPoint(point, points, markers, pointsIndex, markersIndex, doAdvanc
   model.setAttribute('scale', scale);
   // model.setAttribute('animation__scale', 'property: scale; to: 3 3 3; dur: 2000; easing: easeInOutSine; startEvents: click;');
   // model.setAttribute('animation__opacity', 'property: material.opacity; to: 0; dur: 2000; easing: easeInOutSine; startEvents: click;');
-  model.setAttribute('animation__rotation', 'property: rotation; to: 360 ' + rotation + ' 0; dur: 2000; easing: easeInOutSine; loop: true; startEvents: click;');
+  model.setAttribute('animation__rotation', 'property: rotation; to: 360 ' + rotation + ' 0; dur: 4000; easing: easeInOutSine; loop: true; startEvents: click;');
 
   model.addEventListener('click', () => {
     model.setAttribute('clicked', true);
