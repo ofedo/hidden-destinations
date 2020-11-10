@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Hidden Destinations / AR Simulation</title>
+
+  <script src="./js/third-party/aframe/aframe.min.js"></script>
+  <script src="./js/third-party/ar-js-org/aframe-ar.js"></script>
+  <script src="./js/third-party/aframe-extras/aframe-extras.controls.min.js"></script>
+
+</head>
+
+<body style='margin: 0; overflow: hidden;'>
+
+  <a-scene vr-mode-ui="enabled: false" embedded arjs='sourceType: video; sourceUrl: ./assets/video/garden4s.ogv; debugUIEnabled: false;'>
+    <a-assets>
+      <a-asset-item id="arrow" src="assets/3d/arrow.glb"></a-asset-item>
+      <a-asset-item id="symbol1" src="assets/3d/symbol1.glb"></a-asset-item>
+      <a-asset-item id="symbol2" src="assets/3d/symbol2.glb"></a-asset-item>
+      <a-asset-item id="symbol3" src="assets/3d/symbol3.glb"></a-asset-item>
+      <a-asset-item id="symbol4" src="assets/3d/symbol4.glb"></a-asset-item>
+      <a-asset-item id="symbol5" src="assets/3d/symbol5.glb"></a-asset-item>
+      <a-asset-item id="symbol6" src="assets/3d/symbol6.glb"></a-asset-item>
+      <a-asset-item id="symbol7" src="assets/3d/symbol7.glb"></a-asset-item>
+      <a-asset-item id="symbol8" src="assets/3d/symbol8.glb"></a-asset-item>
+      <a-asset-item id="symbol9" src="assets/3d/symbol9.glb"></a-asset-item>
+    </a-assets>
+
+    <a-entity id="rig" movement-controls rotation="0 130 0">
+      <a-camera wasd-controls-enabled="false" look-controls="pointerLockEnabled: true" gps-camera='gpsMinDistance: 5; simulateLatitude: 46.762589; simulateLongitude: 23.58863;'>
+        <!--
+      <a-entity animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.01 0.01 0.01; to: 0.03 0.03 0.03"
+        animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 0.03 0.03 0.03; to: 0.01 0.01 0.01"
+        animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 0.03 0.03 0.03" cursor="fuse: true;" material="color: red; shader: flat" position="0 0 -3" scale="0.03 0.03 0.03" geometry="primitive: ring"
+        raycaster="far: 10; interval: 1000;">
+      </a-entity> -->
+      </a-camera>
+    </a-entity>
+  </a-scene>
+
+  <script src="./js/ar.js"></script>
+</body>
