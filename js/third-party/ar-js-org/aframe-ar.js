@@ -2930,6 +2930,7 @@ ARjs.Source.prototype.init = function (onReady, onError) {
     return this
     function onSourceReady() {
         document.body.appendChild(_this.domElement);
+        _this.domElement.setAttribute('playsinline', true);
         window.dispatchEvent(new CustomEvent('arjs-video-loaded', {
             detail: {
                 component: document.querySelector('#arjs-video'),
@@ -2964,7 +2965,15 @@ ARjs.Source.prototype._initSourceImage = function (onReady) {
 ////////////////////////////////////////////////////////////////////////////////
 //          init video source
 ////////////////////////////////////////////////////////////////////////////////
-
+async function playVideo(domElement, onClick) {
+  try {
+    await domElement.play();
+  } catch(err) {
+		console.log('Failed to play video! ' + err);
+		return;
+  }
+	document.body.removeEventListener('click', onClick);
+}
 
 ARjs.Source.prototype._initSourceVideo = function (onReady) {
     // TODO make it static
@@ -2974,15 +2983,13 @@ ARjs.Source.prototype._initSourceVideo = function (onReady) {
     domElement.style.objectFit = 'initial';
 
     domElement.autoplay = true;
-    domElement.webkitPlaysinline = true;
     domElement.controls = false;
     domElement.loop = true;
     domElement.muted = true;
 
     // trick to trigger the video on android
     document.body.addEventListener('click', function onClick() {
-        document.body.removeEventListener('click', onClick);
-        domElement.play()
+        playVideo(domElement, onClick);
     });
 
     domElement.width = this.parameters.sourceWidth;

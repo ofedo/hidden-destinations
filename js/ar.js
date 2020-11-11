@@ -2,7 +2,6 @@ let scene = document.querySelector('a-scene');
 let camera = document.querySelector('a-camera');
 let rig = document.querySelector('#rig');
 let videoElement;
-
 let soundPlaying;
 
 let route = {
@@ -688,10 +687,11 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   // model.setAttribute('model-material');
   model.setAttribute('refraction-shader', 'marker' + markersIndex);
   model.setAttribute('scale', scale);
-  model.setAttribute('sound', 'src:./assets/audio/location' + markersIndex + '.mp3; rolloffFactor: 0.1; maxDistance: 5;');
-  model.setAttribute('animation__rotation', 'property: rotation; to: 0 360 0; dur: 10000; loop: true; easing: linear;');
-  model.setAttribute('animation__scale', 'property: scale; from: 1 1 1; to: 4 4 4; dur: 10000; easing: easeInSine; startEvents: click;');
-  model.setAttribute('animation__opacity', 'property: model-opacity; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('sound', 'src:./assets/audio/location' + markersIndex + '.mp3; rolloffFactor: 0.1; maxDistance: 3;');
+  model.setAttribute('animation__rotation', 'property: rotation; from: 0 0 0; to: 0 360 0; dur: 10000; loop: true; easing: linear; pauseEvents: click;');
+  model.setAttribute('animation__rotation__click', 'property: rotation; from: 0 0 0; to: 0 360 0; dur: 1000; loop: true; easing: linear; startEvents: click;');
+  model.setAttribute('animation__scale__click', 'property: scale; delay: 1000; from: 1 1 1; to: 4 4 4; dur: 10000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__opacity__click', 'property: model-opacity; delay: 1000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
 
   model.addEventListener('click', () => {
     if (!model.getAttribute('clicked')) {
@@ -764,9 +764,9 @@ function getWayPoint(point, points, markers, pointsIndex, markersIndex, doAdvanc
   // model.setAttribute('model-material');
   model.setAttribute('refraction-shader', 'waypoint' + pointsIndex);
   model.setAttribute('scale', scale);
-  // model.setAttribute('animation__scale', 'property: scale; to: 3 3 3; dur: 2000; easing: easeInOutSine; startEvents: click;');
-  // model.setAttribute('animation__opacity', 'property: material.opacity; to: 0; dur: 2000; easing: easeInOutSine; startEvents: click;');
-  model.setAttribute('animation__rotation', 'property: rotation; to: 360 ' + rotation + ' 0; dur: 4000; easing: easeInOutSine; loop: true; startEvents: click;');
+  // model.setAttribute('animation__scale__click', 'property: scale; to: 3 3 3; dur: 2000; easing: easeInOutSine; startEvents: click;');
+  // model.setAttribute('animation__opacity__click', 'property: material.opacity; to: 0; dur: 2000; easing: easeInOutSine; startEvents: click;');
+  model.setAttribute('animation__rotation__click', 'property: rotation; to: 360 ' + rotation + ' 0; dur: 4000; easing: easeInOutSine; loop: true; startEvents: click;');
 
   model.addEventListener('click', () => {
     model.setAttribute('clicked', true);
@@ -807,7 +807,7 @@ function registerModel(model, index, isMarker = true) {
               if (node.isMesh) {
                 node.material.opacity = opacity;
                 if (node.material.uniforms) {
-                  node.material.uniforms.opacity.value = opacity * opacity;
+                  node.material.uniforms.opacity.value = opacity * opacity * 2;
                 }
               }
             });
