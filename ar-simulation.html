@@ -14,8 +14,17 @@
 
 <body style='margin: 0; overflow: hidden;'>
 
-  <a-scene vr-mode-ui="enabled: false" embedded arjs='sourceType: video; sourceUrl: assets/video/garden.mov; debugUIEnabled: false;'>
+  <a-scene vr-mode-ui="enabled: false" embedded arjs='sourceType: image; sourceUrl: assets/img/garden3.jpg; debugUIEnabled: false;'>
     <a-assets>
+      <audio id="location1" src="assets/audio/location1.mp3" preload="auto"></audio>
+      <audio id="location2" src="assets/audio/location2.mp3" preload="auto"></audio>
+      <audio id="location3" src="assets/audio/location3.mp3" preload="auto"></audio>
+      <audio id="location4" src="assets/audio/location4.mp3" preload="auto"></audio>
+      <audio id="location5" src="assets/audio/location5.mp3" preload="auto"></audio>
+      <audio id="location6" src="assets/audio/location6.mp3" preload="auto"></audio>
+      <audio id="location7" src="assets/audio/location7.mp3" preload="auto"></audio>
+      <audio id="location8" src="assets/audio/location8.mp3" preload="auto"></audio>
+      <audio id="location9" src="assets/audio/location9.mp3" preload="auto"></audio>
       <a-asset-item id="arrow1" src="assets/3d/arrow1.glb"></a-asset-item>
       <a-asset-item id="arrow2" src="assets/3d/arrow2.glb"></a-asset-item>
       <a-asset-item id="arrow3" src="assets/3d/arrow3.glb"></a-asset-item>
@@ -31,7 +40,7 @@
     </a-assets>
 
     <a-entity id="rig" movement-controls rotation="0 130 0">
-      <a-camera far='10' wasd-controls-enabled="false" look-controls="pointerLockEnabled: true" gps-camera='gpsMinDistance: 5; simulateLatitude: 46.762589; simulateLongitude: 23.58863;'>
+      <a-camera wasd-controls-enabled="false" look-controls="pointerLockEnabled: true" gps-camera='gpsMinDistance: 5; simulateLatitude: 46.762589; simulateLongitude: 23.58863;'>
         <!--
       <a-entity animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.01 0.01 0.01; to: 0.03 0.03 0.03"
         animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 0.03 0.03 0.03; to: 0.01 0.01 0.01"
