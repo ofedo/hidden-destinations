@@ -4,6 +4,24 @@ let rig = document.querySelector('#rig');
 let videoElement;
 let soundPlaying;
 
+// trigger sound on window click for iOS Safari to play it
+let modelToPlaySound;
+scene.addEventListener('tap', () => playSound());
+// scene.addEventListener('touchend', () => playSound()); // mutes iOS audio, so buggy
+scene.addEventListener('touchstart', () => playSound());
+scene.addEventListener('click', () => playSound());
+function playSound() {
+  if (modelToPlaySound && !modelToPlaySound.getAttribute('clicked')) {
+    if (soundPlaying) {
+      soundPlaying.stopSound();
+    }
+    soundPlaying = modelToPlaySound.components.sound;
+    modelToPlaySound.components.sound.playSound();
+    modelToPlaySound.setAttribute('clicked', true);
+    modelToPlaySound.click();
+  }
+}
+
 let route = {
   "points": [{
     "lat": 46.762588685120406,
@@ -685,7 +703,7 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   // model.setAttribute('geometry', 'primitive: sphere');
   model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true;`);
   // model.setAttribute('model-material');
-  model.setAttribute('refraction-shader', 'marker' + markersIndex);
+  // model.setAttribute('refraction-shader', 'marker' + markersIndex);
   model.setAttribute('scale', scale);
   model.setAttribute('sound', 'src: #location' + markersIndex + '; rolloffFactor: 0.1; maxDistance: 3;');
   model.setAttribute('animation__rotation', 'property: rotation; from: 0 0 0; to: 0 360 0; dur: 10000; loop: true; easing: linear; pauseEvents: click;');
@@ -693,32 +711,20 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   model.setAttribute('animation__scale__click', 'property: scale; delay: 1000; from: 1 1 1; to: 0 0 0; dur: 10000; easing: easeInSine; startEvents: click;');
   model.setAttribute('animation__opacity__click', 'property: model-opacity; delay: 1000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
 
-  model.addEventListener('click', () => {
-    if (!model.getAttribute('clicked')) {
-      if (soundPlaying) {
-        soundPlaying.stopSound();
+  model.addEventListener('sound-ended', () => {
+    alert('SOUND ENDED');
+    soundPlaying = null;
+    if (pointsIndex < points.length) {
+      // alert('SOUND ENDED - ADVANCE');
+      models.forEach(m => m.parentNode.removeChild(m));
+      models = [];
+      if (doAdvanceRoute) {
+        advanceRoute(points, markers, pointsIndex, markersIndex);
       }
-      soundPlaying = model.components.sound;
-      model.components.sound.playSound();
-      // alert('PLAY SOUND');
-
-      model.addEventListener('sound-ended', () => {
-        // alert('SOUND ENDED');
-        soundPlaying = null;
-        if (pointsIndex < points.length) {
-          // alert('SOUND ENDED - ADVANCE');
-          models.forEach(m => m.parentNode.removeChild(m));
-          models = [];
-          if (doAdvanceRoute) {
-            advanceRoute(points, markers, pointsIndex, markersIndex);
-          }
-        } else {
-          // alert('SOUND ENDED - THE END');
-          window.location = './credits.html';
-        }
-      });
+    } else {
+      // alert('SOUND ENDED - THE END');
+      window.location = './credits.html';
     }
-    model.setAttribute('clicked', true);
   });
 
   registerModel(model, markersIndex);
@@ -762,15 +768,15 @@ function getWayPoint(point, points, markers, pointsIndex, markersIndex, doAdvanc
 
   model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true;`);
   // model.setAttribute('model-material');
-  model.setAttribute('refraction-shader', 'waypoint' + pointsIndex);
+  // model.setAttribute('refraction-shader', 'waypoint' + pointsIndex);
   model.setAttribute('scale', scale);
   // model.setAttribute('animation__scale__click', 'property: scale; to: 3 3 3; dur: 2000; easing: easeInOutSine; startEvents: click;');
   // model.setAttribute('animation__opacity__click', 'property: material.opacity; to: 0; dur: 2000; easing: easeInOutSine; startEvents: click;');
   model.setAttribute('animation__rotation__click', 'property: rotation; to: 360 ' + rotation + ' 0; dur: 4000; easing: easeInOutSine; loop: true; startEvents: click;');
 
-  model.addEventListener('click', () => {
-    model.setAttribute('clicked', true);
-  });
+  // model.addEventListener('click', () => {
+  //   model.setAttribute('clicked', true);
+  // });
 
   registerModel(model, pointsIndex, false);
 
@@ -791,9 +797,10 @@ function registerModel(model, index, isMarker = true) {
         let camPos = rig ? rig.object3D.position : camera.object3D.position;
         let elPos = model.object3D.position;
         let distance = camPos.distanceTo(elPos);
-        // trigger click when near
-        if (distance < 10 && !el.getAttribute('clicked')) {
-          model.click();
+
+        // set the near by marker model to play its sound on window click
+        if (distance < 10 && isMarker) {
+          modelToPlaySound = model;
         }
 
         // opacity based on distance
