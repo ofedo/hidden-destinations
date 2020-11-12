@@ -608,7 +608,7 @@ gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 `
 
     const fragmentShader = `
-uniform sampler2D texture;
+uniform sampler2D videoTexture;
 varying vec3 vRefract;
 uniform float distance;
 uniform float opacity;
@@ -617,7 +617,7 @@ void main()
 {
 vec2 p = vec2( vRefract.x * distance + 0.5, vRefract.y * distance + 0.5 );
 p = vec2(1.0, 1.0) - p;
-vec3 color = texture2D( texture, p ).rgb;
+vec3 color = texture2D( videoTexture, p ).rgb;
 gl_FragColor = vec4( color, opacity ) * vec4( tint, 1.0 );
 }
 `
@@ -627,7 +627,7 @@ gl_FragColor = vec4( color, opacity ) * vec4( tint, 1.0 );
 
     this.material = new THREE.ShaderMaterial({
       uniforms: {
-        texture: {
+        videoTexture: {
           value: videoTexture
         },
         refractionRatio: {
@@ -685,7 +685,7 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   // model.setAttribute('geometry', 'primitive: sphere');
   model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true;`);
   // model.setAttribute('model-material');
-  // model.setAttribute('refraction-shader', 'marker' + markersIndex);
+  model.setAttribute('refraction-shader', 'marker' + markersIndex);
   model.setAttribute('scale', scale);
   model.setAttribute('sound', 'src: #location' + markersIndex + '; rolloffFactor: 0.1; maxDistance: 3;');
   model.setAttribute('animation__rotation', 'property: rotation; from: 0 0 0; to: 0 360 0; dur: 10000; loop: true; easing: linear; pauseEvents: click;');
@@ -762,7 +762,7 @@ function getWayPoint(point, points, markers, pointsIndex, markersIndex, doAdvanc
 
   model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true;`);
   // model.setAttribute('model-material');
-  // model.setAttribute('refraction-shader', 'waypoint' + pointsIndex);
+  model.setAttribute('refraction-shader', 'waypoint' + pointsIndex);
   model.setAttribute('scale', scale);
   // model.setAttribute('animation__scale__click', 'property: scale; to: 3 3 3; dur: 2000; easing: easeInOutSine; startEvents: click;');
   // model.setAttribute('animation__opacity__click', 'property: material.opacity; to: 0; dur: 2000; easing: easeInOutSine; startEvents: click;');
