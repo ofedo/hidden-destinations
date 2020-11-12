@@ -712,7 +712,7 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   model.setAttribute('animation__opacity__click', 'property: model-opacity; delay: 1000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
 
   model.addEventListener('sound-ended', () => {
-    alert('SOUND ENDED');
+    // alert('SOUND ENDED');
     soundPlaying = null;
     if (pointsIndex < points.length) {
       // alert('SOUND ENDED - ADVANCE');
