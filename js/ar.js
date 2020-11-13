@@ -814,9 +814,9 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   // model.setAttribute('animation__opacity__click', 'property: components.material.material.opacity; delay: 5000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
   // model.setAttribute('animation__opacity__click', 'property: model-opacity; delay: 1000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
 
-  model.setAttribute('event-set__click', '_target: #sky0'+ ((markersIndex - 1) % 2) +'; _delay: 1000; material.src: #panorama' + (markersIndex + 1) + '');
-  model.setAttribute('proxy-event__fadein', 'event: click; to: #sky0' + (markersIndex  % 2) + '; as: fadein');
-  model.setAttribute('proxy-event__fadeout', 'event: click; to: #sky0' + ((markersIndex - 1)  % 2) + '; as: fadeout');
+  // model.setAttribute('event-set__click', '_target: #sky0'+ ((markersIndex - 1) % 2) +'; _delay: 1000; material.src: #panorama' + (markersIndex + 1) + '');
+  // model.setAttribute('proxy-event__fadein', 'event: click; to: #sky0' + (markersIndex  % 2) + '; as: fadein');
+  // model.setAttribute('proxy-event__fadeout', 'event: click; to: #sky0' + ((markersIndex - 1)  % 2) + '; as: fadeout');
 
   // model.setAttribute('event-set__click', '_target: #sky; _delay: 300; material.src: #panorama' + (markersIndex) + '');
   // model.setAttribute('proxy-event', 'event: click; to: #sky; as: fade');
