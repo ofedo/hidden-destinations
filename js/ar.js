@@ -1,6 +1,7 @@
 let scene = document.querySelector('a-scene');
 let camera = document.querySelector('a-camera');
 let rig = document.querySelector('#rig');
+
 let videoElement;
 let soundPlaying;
 
@@ -10,6 +11,7 @@ scene.addEventListener('tap', () => playSound());
 // scene.addEventListener('touchend', () => playSound()); // mutes iOS audio, so buggy
 scene.addEventListener('touchstart', () => playSound());
 scene.addEventListener('click', () => playSound());
+
 function playSound() {
   if (modelToPlaySound && !modelToPlaySound.getAttribute('clicked')) {
     if (soundPlaying) {
@@ -575,119 +577,192 @@ AFRAME.registerComponent('model-material', {
   }
 });
 
-AFRAME.registerComponent('model-opacity', {
-  schema: {
-    default: 1.0
-  },
-  init: function() {
-    this.el.addEventListener('model-loaded', this.update.bind(this));
-  },
-  update: function() {
-    var mesh = this.el.getObject3D('mesh');
-    var data = this.data;
-    if (!mesh) {
-      return;
-    }
-    mesh.traverse(function(node) {
-      if (node.isMesh) {
-        node.material.opacity = data;
-        if (node.material.uniforms) {
-          node.material.uniforms.opacity.value = data;
-        }
-      }
-    });
-  }
-});
+// AFRAME.registerComponent('model-opacity', {
+//   schema: {
+//     default: 1.0
+//   },
+//   init: function() {
+//     this.el.addEventListener('model-loaded', this.update.bind(this));
+//   },
+//   update: function() {
+//     var mesh = this.el.getObject3D('mesh');
+//     var data = this.data;
+//     if (!mesh) {
+//       return;
+//     }
+//     mesh.traverse(function(node) {
+//       if (node.isMesh) {
+//         node.material.opacity = data;
+//         if (node.material.uniforms) {
+//           node.material.uniforms.opacity.value = data;
+//         }
+//       }
+//     });
+//   }
+// });
+// 
+// AFRAME.registerComponent('glow-shader', {
+//   multiple: true,
+//   init: function() {
+//     this.doShaderMaterial()
+//   },
+// 
+//   doShaderMaterial: function() {
+//     const vertexShader = `
+// uniform vec3 viewVector;
+// uniform float c;
+// uniform float p;
+// varying float intensity;
+// void main() 
+// {
+//     vec3 vNormal = normalize( normalMatrix * normal );
+// 	vec3 vNormel = normalize( normalMatrix * viewVector );
+// 	intensity = pow( c - dot(vNormal, vNormel), p );
+// 
+//     gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+// }
+// `
+// 
+//     const fragmentShader = `
+// uniform vec3 glowColor;
+// varying float intensity;
+// uniform float opacity;
+// void main() 
+// {
+// 	vec3 glow = glowColor * intensity;
+//     gl_FragColor = vec4( glow, opacity );
+// }
+// `
+// 
+//     const camPos = rig ? rig.object3D.position : camera.object3D.position;
+// 
+//     this.el.object3DMap.mesh.material = new THREE.ShaderMaterial({
+//       uniforms: {
+//         "c": {
+//           type: "f",
+//           value: 0.0
+//         },
+//         "p": {
+//           type: "f",
+//           value: 6
+//         },
+//         glowColor: {
+//           type: "c",
+//           value: new THREE.Color(0xffffff)
+//         },
+//         viewVector: {
+//           type: "v3",
+//           value: camPos
+//         },
+//         opacity: {
+//           type: "f",
+//           value: 1.0
+//         },
+//       },
+//       vertexShader: vertexShader,
+//       fragmentShader: fragmentShader,
+//       side: THREE.BackSide,
+//       blending: THREE.AdditiveBlending,
+//       transparent: true
+//     });
+//   },
+// 
+//   tick: function() {
+//     const camPos = rig ? rig.object3D.position : camera.object3D.position;
+//     this.el.object3DMap.mesh.material.uniforms.viewVector.value =
+//       new THREE.Vector3().subVectors(camPos, this.el.object3DMap.mesh.position);
+//   }
+// });
 
-AFRAME.registerComponent('refraction-shader', {
-  multiple: true,
-  init: function() {
-    if (!videoElement) {
-      window.addEventListener('arjs-video-loaded', (e) => {
-        videoElement = e.detail.component;
-        this.doShaderMaterial(videoElement)
-      });
-    } else {
-      this.doShaderMaterial(videoElement)
-    }
-  },
-
-  doShaderMaterial: function(videoElement) {
-    const vertexShader = `
-uniform float refractionRatio;
-varying vec3 vRefract;
-void main()
-{
-vec4 mPosition = modelMatrix * vec4( position, 1.0 );
-vec3 nWorld = normalize( mat3( modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz ) * normal );
-vRefract = normalize( refract( normalize( mPosition.xyz - cameraPosition ), nWorld, refractionRatio ) );
-gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-}
-`
-
-    const fragmentShader = `
-uniform sampler2D videoTexture;
-varying vec3 vRefract;
-uniform float distance;
-uniform float opacity;
-uniform vec3 tint;
-void main()
-{
-vec2 p = vec2( vRefract.x * distance + 0.5, vRefract.y * distance + 0.5 );
-p = vec2(1.0, 1.0) - p;
-vec3 color = texture2D( videoTexture, p ).rgb;
-gl_FragColor = vec4( color, opacity ) * vec4( tint, 1.0 );
-}
-`
-    var videoTexture = new THREE.VideoTexture(videoElement);
-    videoTexture.minFilter = THREE.LinearFilter;
-
-
-    this.material = new THREE.ShaderMaterial({
-      uniforms: {
-        videoTexture: {
-          value: videoTexture
-        },
-        refractionRatio: {
-          value: 0.95
-        },
-        distance: {
-          value: 1.0
-        },
-        opacity: {
-          value: 0.8
-        },
-        tint: {
-          value: new THREE.Vector3(0.5, 0.5, 0.5)
-        }
-      },
-      vertexShader: vertexShader,
-      fragmentShader: fragmentShader,
-      transparent: true
-    });
-    if (this.el.getAttribute('marker')) {
-      this.material.uniforms.tint.value = new THREE.Vector3(1.0, 1.0, 1.0);
-    }
-    this.setToMesh();
-    this.el.addEventListener('model-loaded', () => this.setToMesh());
-  },
-
-  setToMesh: function() {
-    const mesh = this.el.getObject3D('mesh');
-    if (mesh) {
-      mesh.material = this.material;
-
-      mesh.traverse((node) => {
-        if (node.isMesh) {
-          node.material = mesh.material;
-        }
-      });
-    }
-  }
-});
+// AFRAME.registerComponent('refraction-shader', {
+//   multiple: true,
+//   init: function() {
+//     if (!videoElement) {
+//       window.addEventListener('arjs-video-loaded', (e) => {
+//         videoElement = e.detail.component;
+//         this.doShaderMaterial(videoElement)
+//       });
+//     } else {
+//       this.doShaderMaterial(videoElement)
+//     }
+//   },
+// 
+//   doShaderMaterial: function(videoElement) {
+//     const vertexShader = `
+// uniform float refractionRatio;
+// varying vec3 vRefract;
+// void main()
+// {
+// vec4 mPosition = modelMatrix * vec4( position, 1.0 );
+// vec3 nWorld = normalize( mat3( modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz ) * normal );
+// vRefract = normalize( refract( normalize( mPosition.xyz - cameraPosition ), nWorld, refractionRatio ) );
+// gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+// }
+// `
+// 
+//     const fragmentShader = `
+// uniform sampler2D videoTexture;
+// varying vec3 vRefract;
+// uniform float distance;
+// uniform float opacity;
+// uniform vec3 tint;
+// void main()
+// {
+// vec2 p = vec2( vRefract.x * distance + 0.5, vRefract.y * distance + 0.5 );
+// p = vec2(1.0, 1.0) - p;
+// vec3 color = texture2D( videoTexture, p ).rgb;
+// gl_FragColor = vec4( color, opacity ) * vec4( tint, 1.0 );
+// }
+// `
+//     var videoTexture = new THREE.VideoTexture(videoElement);
+//     videoTexture.minFilter = THREE.LinearFilter;
+// 
+// 
+//     this.material = new THREE.ShaderMaterial({
+//       uniforms: {
+//         videoTexture: {
+//           value: videoTexture
+//         },
+//         refractionRatio: {
+//           value: 0.95
+//         },
+//         distance: {
+//           value: 1.0
+//         },
+//         opacity: {
+//           value: 0.8
+//         },
+//         tint: {
+//           value: new THREE.Vector3(0.5, 0.5, 0.5)
+//         }
+//       },
+//       vertexShader: vertexShader,
+//       fragmentShader: fragmentShader,
+//       transparent: true
+//     });
+//     if (this.el.getAttribute('marker')) {
+//       this.material.uniforms.tint.value = new THREE.Vector3(1.0, 1.0, 1.0);
+//     }
+//     this.setToMesh();
+//     this.el.addEventListener('model-loaded', () => this.setToMesh());
+//   },
+// 
+//   setToMesh: function() {
+//     const mesh = this.el.getObject3D('mesh');
+//     if (mesh) {
+//       mesh.material = this.material;
+// 
+//       mesh.traverse((node) => {
+//         if (node.isMesh) {
+//           node.material = mesh.material;
+//         }
+//       });
+//     }
+//   }
+// });
 
 function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceRoute = true) {
-  let color = 'red';
+  let color = 'white';
   let opacity = '1';
   let scale = '1 1 1';
   // let text = 'value: This is an event marker!; width: 10;';
@@ -701,15 +776,32 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   model.setAttribute('position', '0 2 0');
   // model.setAttribute('position', '0 378 0');
   // model.setAttribute('geometry', 'primitive: sphere');
-  model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true;`);
-  // model.setAttribute('model-material');
+  model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true; emissive: #FFF; emissiveIntensity: 1; displacementMap: #wave; displacementScale: 0.0; displacementBias: -0.001;`);
+  model.setAttribute('model-material');
   // model.setAttribute('refraction-shader', 'marker' + markersIndex);
   model.setAttribute('scale', scale);
   model.setAttribute('sound', 'src: #location' + markersIndex + '; rolloffFactor: 0.1; maxDistance: 3;');
-  model.setAttribute('animation__rotation', 'property: rotation; from: 0 0 0; to: 0 360 0; dur: 10000; loop: true; easing: linear; pauseEvents: click;');
-  model.setAttribute('animation__rotation__click', 'property: rotation; from: 0 0 0; to: 0 360 0; dur: 1000; loop: true; easing: linear; startEvents: click;');
-  model.setAttribute('animation__scale__click', 'property: scale; delay: 1000; from: 1 1 1; to: 0 0 0; dur: 10000; easing: easeInSine; startEvents: click;');
-  model.setAttribute('animation__opacity__click', 'property: model-opacity; delay: 1000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__rotation', 'property: object3D.rotation.y; from: 0; to: 360; dur: 10000; loop: true; easing: linear; pauseEvents: click;');
+  model.setAttribute('animation__rotation__click', 'property: object3D.rotation.y; from: 0; to: 360; dur: 1000; loop: true; easing: linear; startEvents: click;');
+  model.setAttribute('animation__material__displacement1__click', 'property: material.displacementBias; from: -0.001; to: 0; dur: 5000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__material__displacement2__click', 'property: material.displacementBias; delay: 5000; from: 0; to: -0.001; dur: 5000; easing: easeInSine; startEvents: click;');
+  // model.setAttribute('animation__opacity1__click', 'property: components.material.material.opacity; from: 1; to: 0; dur: 1000; easing: easeInSine; startEvents: click;');
+  // model.setAttribute('animation__opacity2__click', 'property: components.material.material.opacity; delay: 1000; from: 0; to: 1; dur: 1000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__scale__x__up__click', 'property: object3D.scale.x; delay: 0; from: 1; to: 2; dur: 5000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__scale__y__up__click', 'property: object3D.scale.y; delay: 0; from: 1; to: 2; dur: 5000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__scale__z__up__click', 'property: object3D.scale.z; delay: 0; from: 1; to: 2; dur: 5000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__scale__x__down__click', 'property: object3D.scale.x; delay: 5000; from: 2; to: 1; dur: 10000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__scale__y__down__click', 'property: object3D.scale.y; delay: 5000; from: 2; to: 1; dur: 10000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__scale__z__down__click', 'property: object3D.scale.z; delay: 5000; from: 2; to: 1; dur: 10000; easing: easeInSine; startEvents: click;');
+  // model.setAttribute('animation__opacity__click', 'property: components.material.material.opacity; delay: 5000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
+  // model.setAttribute('animation__opacity__click', 'property: model-opacity; delay: 1000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
+
+  // model.setAttribute('proxy-event', 'event: click; to: #sky' + (markersIndex - 1) + '; as: fadeout');
+  // model.setAttribute('proxy-event', 'event: click; to: #sky' + markersIndex + '; as: fadein');
+
+  // model.setAttribute('event-set__click', '_target: #sky' + (markersIndex % 3 + 1) +'; _delay: 100;');
+  // model.setAttribute('event-set__click', '_target: #sky; _delay: 100; material.src: #panorama' + (markersIndex % 3 + 1) + '');
+  // model.setAttribute('proxy-event', 'event: click; to: #sky; as: fade');
 
   model.addEventListener('sound-ended', () => {
     // alert('SOUND ENDED');
@@ -748,8 +840,8 @@ function getArrowRotation(points, pointsIndex) {
 }
 
 function getWayPoint(point, points, markers, pointsIndex, markersIndex, doAdvanceRoute = true) {
-  let color = 'white';
-  let opacity = '0.5';
+  let color = 'black';
+  let opacity = '1';
   let scale = '0.5 0.5 0.5';
   let text = 'value: WAYPOINT' + pointsIndex + '; width: 10;';
 
@@ -764,31 +856,52 @@ function getWayPoint(point, points, markers, pointsIndex, markersIndex, doAdvanc
   // model.setAttribute('geometry', 'primitive: sphere');
 
   var rotation = getArrowRotation(points, pointsIndex);
-  model.setAttribute('rotation', '0 ' + rotation + ' 0');
+  model.setAttribute('rotation', '90 ' + rotation + ' 0');
 
-  model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true;`);
-  // model.setAttribute('model-material');
+  model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true; roughness: 1; displacementMap: #wave; displacementScale: 0.0; displacementBias: -0.005`);
+  model.setAttribute('model-material');
   // model.setAttribute('refraction-shader', 'waypoint' + pointsIndex);
   model.setAttribute('scale', scale);
   // model.setAttribute('animation__scale__click', 'property: scale; to: 3 3 3; dur: 2000; easing: easeInOutSine; startEvents: click;');
   // model.setAttribute('animation__opacity__click', 'property: material.opacity; to: 0; dur: 2000; easing: easeInOutSine; startEvents: click;');
-  model.setAttribute('animation__rotation__click', 'property: rotation; to: 360 ' + rotation + ' 0; dur: 4000; easing: easeInOutSine; loop: true; startEvents: click;');
+  model.setAttribute('animation__rotation__click', 'property: object3D.rotation.x; from: 90; to: 450; dur: 4000; easing: linear; loop: true; startEvents: click;');
+  // model.setAttribute('animation__material__displacement1__click', 'property: material.displacementBias; from: 0; to: -0.005; dur: 1000; easing: easeInSine; startEvents: click;');
 
-  // model.addEventListener('click', () => {
-  //   model.setAttribute('clicked', true);
-  // });
+  model.addEventListener('click', () => {
+    model.setAttribute('clicked', true);
+  });
 
   registerModel(model, pointsIndex, false);
 
   return model;
-
 }
 
-function registerModel(model, index, isMarker = true) {
+// function getWayPointSphere(point, points, markers, pointsIndex, markersIndex, doAdvanceRoute = true) {
+//   let color = 'white';
+//   let opacity = '0.5';
+//   let scale = '0.5 0.5 0.5';
+// 
+//   let model = document.createElement('a-entity');
+//   model.setAttribute('id', 'waypoint-sphere' + pointsIndex);
+//   model.setAttribute('gps-entity-place', `latitude: ${point.lat}; longitude: ${point.lng};`);
+//   model.setAttribute('geometry', 'primitive: sphere');
+//   // model.setAttribute('rotation', '90 0 0');
+//   model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true; roughness: 1; displacementMap: #wave; displacementScale: 0.0; displacementBias: -0.005`);
+//   // model.setAttribute('glow-shader');
+//   model.setAttribute('scale', scale);
+//   registerModel(model, pointsIndex, false, true);
+// 
+//   model.addEventListener('click', () => {
+//     model.setAttribute('clicked', true);
+//   });
+//   return model;
+// }
+
+function registerModel(model, index, isMarker = true, isWaypointSphere = false) {
   model.addEventListener('loaded', () => {
     window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'));
 
-    let attrId = (isMarker ? 'marker' : 'waypoint') + index;
+    let attrId = (isMarker ? 'marker' : (isWaypointSphere ? 'waypoint-sphere' : 'waypoint')) + index;
     model.setAttribute(attrId);
     AFRAME.registerComponent(attrId, {
       tick: function() {
@@ -799,12 +912,18 @@ function registerModel(model, index, isMarker = true) {
         let distance = camPos.distanceTo(elPos);
 
         // set the near by marker model to play its sound on window click
-        if (distance < 10 && isMarker) {
-          modelToPlaySound = model;
+        if (distance < 10) {
+          if (isMarker) {
+            modelToPlaySound = model;
+          } else {
+            if (!model.getAttribute('clicked')) {
+              model.click();
+            }
+          }
         }
 
         // opacity based on distance
-        if (distance && (!isMarker || !el.getAttribute('clicked'))) {
+        if (distance) {
           let opacity = Math.min(1, 6 / distance);
           // el.setAttribute('material', 'opacity: ' + Math.min(1, 20 / distance) + ';');
           const mesh = el.getObject3D('mesh');
@@ -815,7 +934,7 @@ function registerModel(model, index, isMarker = true) {
               if (node.isMesh) {
                 node.material.opacity = opacity;
                 if (node.material.uniforms) {
-                  node.material.uniforms.opacity.value = opacity * opacity * 2;
+                  node.material.uniforms.opacity.value = opacity;
                 }
               }
             });
@@ -836,6 +955,7 @@ function advanceRoute(points, markers, pointsIndex, markersIndex) {
     markersIndex++;
     models.push(getMarker(point, points, markers, pointsIndex, markersIndex));
   } else {
+    // models.push(getWayPointSphere(point, points, markers, pointsIndex, markersIndex, !advanceUntilNextMarker));
     models.push(getWayPoint(point, points, markers, pointsIndex, markersIndex, !advanceUntilNextMarker));
   }
   if (advanceUntilNextMarker) {
@@ -861,6 +981,7 @@ function createRoute(points, markers, pointsIndex, markersIndex) {
       markersIndex++;
       models.push(getMarker(point, points, markers, pointsIndex, markersIndex, false));
     } else {
+      // models.push(getWayPointSphere(point, points, markers, pointsIndex, markersIndex, !advanceUntilNextMarker));
       models.push(getWayPoint(point, points, markers, pointsIndex, markersIndex, false));
     }
   });
