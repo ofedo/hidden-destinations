@@ -1,3 +1,11 @@
+document.addEventListener('DOMContentLoaded', function() {
+  var scene = document.querySelector('a-scene');
+  var splash = document.querySelector('#splash');
+  scene.addEventListener('loaded', function(e) {
+    splash.style.display = 'none';
+  });
+});
+
 let scene = document.querySelector('a-scene');
 let camera = document.querySelector('a-camera');
 let rig = document.querySelector('#rig');
@@ -18,11 +26,21 @@ function playSound() {
       soundPlaying.stopSound();
     }
     soundPlaying = modelToPlaySound.components.sound;
-    modelToPlaySound.components.sound.playSound();
-    modelToPlaySound.setAttribute('clicked', true);
-    modelToPlaySound.click();
+    if (soundPlaying.loaded) {
+      playIt();
+    } else {
+      soundPlaying.addEventListener('sound-loaded', () => playIt());
+    }
+
   }
 }
+
+function playIt() {
+  modelToPlaySound.components.sound.playSound();
+  modelToPlaySound.setAttribute('clicked', true);
+  modelToPlaySound.click();
+}
+
 
 let route = {
   "points": [{
@@ -796,12 +814,15 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   // model.setAttribute('animation__opacity__click', 'property: components.material.material.opacity; delay: 5000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
   // model.setAttribute('animation__opacity__click', 'property: model-opacity; delay: 1000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
 
+  model.setAttribute('event-set__click', '_target: #sky0'+ ((markersIndex - 1) % 2) +'; _delay: 1000; material.src: #panorama' + (markersIndex + 1) + '');
+  model.setAttribute('proxy-event__fadein', 'event: click; to: #sky0' + (markersIndex  % 2) + '; as: fadein');
+  model.setAttribute('proxy-event__fadeout', 'event: click; to: #sky0' + ((markersIndex - 1)  % 2) + '; as: fadeout');
+
+  // model.setAttribute('event-set__click', '_target: #sky; _delay: 300; material.src: #panorama' + (markersIndex) + '');
+  // model.setAttribute('proxy-event', 'event: click; to: #sky; as: fade');
+
   // model.setAttribute('proxy-event', 'event: click; to: #sky' + (markersIndex - 1) + '; as: fadeout');
   // model.setAttribute('proxy-event', 'event: click; to: #sky' + markersIndex + '; as: fadein');
-
-  // model.setAttribute('event-set__click', '_target: #sky' + (markersIndex % 3 + 1) +'; _delay: 100;');
-  // model.setAttribute('event-set__click', '_target: #sky; _delay: 100; material.src: #panorama' + (markersIndex % 3 + 1) + '');
-  // model.setAttribute('proxy-event', 'event: click; to: #sky; as: fade');
 
   model.addEventListener('sound-ended', () => {
     // alert('SOUND ENDED');
@@ -843,7 +864,7 @@ function getWayPoint(point, points, markers, pointsIndex, markersIndex, doAdvanc
   let color = 'black';
   let opacity = '1';
   let scale = '0.5 0.5 0.5';
-  let text = 'value: WAYPOINT' + pointsIndex + '; width: 10;';
+  // let text = 'value: WAYPOINT' + pointsIndex + '; width: 10;';
 
   let model = document.createElement('a-entity');
   model.setAttribute('id', 'waypoint' + pointsIndex);

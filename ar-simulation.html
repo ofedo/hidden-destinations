@@ -4,6 +4,9 @@
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  
+  <link rel="stylesheet" href="styles-ar.css">
+  
   <title>Hidden Destinations / Sim</title>
 
   <script src="./js/third-party/aframe/aframe.min.js"></script>
@@ -16,11 +19,24 @@
 
 <body style='margin: 0; overflow: hidden;'>
 
+  <div id="splash">
+    <div class="loading"></div>
+  </div>
+
   <a-scene background="color: black" vr-mode-ui="enabled: false" embedded arjs='sourceType: image; sourceUrl: assets/img/panorama1.jpg; debugUIEnabled: false;'>
-    <a-assets>
+    <a-assets timeout="10000">
+      <audio id="location1" src="assets/audio/location1.mp3" preload="auto"></audio>
+      <audio id="location2" src="assets/audio/location2.mp3"></audio>
+      <audio id="location3" src="assets/audio/location3.mp3"></audio>
+      <audio id="location4" src="assets/audio/location4.mp3"></audio>
+      <audio id="location5" src="assets/audio/location5.mp3"></audio>
+      <audio id="location6" src="assets/audio/location6.mp3"></audio>
+      <audio id="location7" src="assets/audio/location7.mp3"></audio>
+      <audio id="location8" src="assets/audio/location8.mp3"></audio>
+      <audio id="location9" src="assets/audio/location9.mp3"></audio>
       <img id="wave" src="assets/img/wave.png">
       <img id="panorama0" src="assets/img/panorama0.jpg">
-      <!-- <img id="panorama1" src="assets/img/panorama1.jpg">
+      <img id="panorama1" src="assets/img/panorama1.jpg">
       <img id="panorama2" src="assets/img/panorama2.jpg">
       <img id="panorama3" src="assets/img/panorama3.jpg">
       <img id="panorama4" src="assets/img/panorama4.jpg">
@@ -28,16 +44,7 @@
       <img id="panorama6" src="assets/img/panorama6.jpg">
       <img id="panorama7" src="assets/img/panorama7.jpg">
       <img id="panorama8" src="assets/img/panorama8.jpg">
-      <img id="panorama9" src="assets/img/panorama9.jpg"> -->
-      <audio id="location1" src="assets/audio/location1.mp3" preload="auto"></audio>
-      <audio id="location2" src="assets/audio/location2.mp3" preload="auto"></audio>
-      <audio id="location3" src="assets/audio/location3.mp3" preload="auto"></audio>
-      <audio id="location4" src="assets/audio/location4.mp3" preload="auto"></audio>
-      <audio id="location5" src="assets/audio/location5.mp3" preload="auto"></audio>
-      <audio id="location6" src="assets/audio/location6.mp3" preload="auto"></audio>
-      <audio id="location7" src="assets/audio/location7.mp3" preload="auto"></audio>
-      <audio id="location8" src="assets/audio/location8.mp3" preload="auto"></audio>
-      <audio id="location9" src="assets/audio/location9.mp3" preload="auto"></audio>
+      <img id="panorama9" src="assets/img/panorama9.jpg">
       <a-asset-item id="arrow1" src="assets/3d/arrow1.glb"></a-asset-item>
       <a-asset-item id="arrow2" src="assets/3d/arrow2.glb"></a-asset-item>
       <a-asset-item id="arrow3" src="assets/3d/arrow3.glb"></a-asset-item>
@@ -62,9 +69,18 @@
       </a-entity> -->
       </a-camera>
     </a-entity>
+
+    <!-- <a-sky id="sky" src="#panorama0" transparent="true" material="opacity: 1" animation__fade="property: components.material.material.color; type: color; from: #FFF; to: #000; dur: 300; startEvents: fade"
+      animation__fadeback="property: components.material.material.color; type: color; from: #000; to: #FFF; dur: 300; startEvents: animationcomplete__fade"></a-sky> -->
+      
+      <a-sky id="sky00" radius="500" src="#panorama0" transparent="true" material="opacity: 1" animation__fadeout="property: components.material.material.opacity; from: 1; to: 0; dur: 100; startEvents: fadeout"
+        animation__fadein="property: components.material.material.opacity; from: 0; to: 1; dur: 100; startEvents: fadein"></a-sky>
+      <a-sky id="sky01" radius="500" src="#panorama1" transparent="true" material="opacity: 0" animation__fadeout="property: components.material.material.opacity; from: 1; to: 0; dur: 100; startEvents: fadeout"
+        animation__fadein="property: components.material.material.opacity; from: 0; to: 1; dur: 100; startEvents: fadein"></a-sky>
+<!-- 
     <a-sky id="sky0" src="#panorama0" transparent="true" material="opacity: 1" animation__fadeout="property: components.material.material.opacity; from: 1; to: 0; dur: 100; startEvents: fadeout"
       animation__fadein="property: components.material.material.opacity; from: 0; to: 1; dur: 100; delay: 100; startEvents: fadein"></a-sky>
-    <!-- <a-sky id="sky1" src="#panorama1" transparent="true" material="opacity: 0" animation__fadeout="property: components.material.material.opacity; from: 1; to: 0; dur: 100; startEvents: fadeout"
+    <a-sky id="sky1" src="#panorama1" transparent="true" material="opacity: 0" animation__fadeout="property: components.material.material.opacity; from: 1; to: 0; dur: 100; startEvents: fadeout"
       animation__fadein="property: components.material.material.opacity; from: 0; to: 1; dur: 100; delay: 100; startEvents: fadein"></a-sky>
     <a-sky id="sky2" src="#panorama2" transparent="true" material="opacity: 0" animation__fadeout="property: components.material.material.opacity; from: 1; to: 0; dur: 100; startEvents: fadeout"
       animation__fadein="property: components.material.material.opacity; from: 0; to: 1; dur: 100; delay: 100; startEvents: fadein"></a-sky>
@@ -81,7 +97,8 @@
     <a-sky id="sky8" src="#panorama8" transparent="true" material="opacity: 0" animation__fadeout="property: components.material.material.opacity; from: 1; to: 0; dur: 100; startEvents: fadeout"
       animation__fadein="property: components.material.material.opacity; from: 0; to: 1; dur: 100; delay: 100; startEvents: fadein"></a-sky>
     <a-sky id="sky9" src="#panorama9" transparent="true" material="opacity: 0" animation__fadeout="property: components.material.material.opacity; from: 1; to: 0; dur: 100; startEvents: fadeout"
-      animation__fadein="property: components.material.material.opacity; from: 0; to: 1; dur: 100; delay: 100; startEvents: fadein"></a-sky> -->
+      animation__fadein="property: components.material.material.opacity; from: 0; to: 1; dur: 100; delay: 100; startEvents: fadein"></a-sky>
+       -->
   </a-scene>
 
   <script src="./js/ar.js"></script>
