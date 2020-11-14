@@ -3,11 +3,6 @@ body {
   margin: 0 auto;
   text-align: center;
   font-size: 1em;
-  /* font-family: 'Dawning of a New Day', cursive; */
-  /* font-family: 'La Belle Aurore', cursive; */
-  /* font-family: 'Reenie Beanie', cursive; */
-  /* font-family: 'Homemade Apple', cursive; */
-  /* font-family: 'Ruthie', cursive; */
   font-family: 'Beth Ellen', cursive;
   padding: 1em 3em;
 }
@@ -38,6 +33,7 @@ ul, dl {
   background-size: 30px;
   background-image: url("./assets/img/wave.png");
   animation: slide 3s infinite linear;
+  transform: translateZ(0);
 }
 
 .gradient2 {
@@ -50,6 +46,7 @@ ul, dl {
   background-image: url("./assets/img/wave.png");
   animation: slide 3s infinite linear;
   animation-direction: reverse;
+  transform: translateZ(0);
 }
 
 @keyframes slide {
