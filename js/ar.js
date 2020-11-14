@@ -11,31 +11,33 @@ let camera = document.querySelector('a-camera');
 let rig = document.querySelector('#rig');
 
 let videoElement;
-let soundPlaying;
+let modelPlayingSound;
 
 // trigger sound on window click for iOS Safari to play it
 let modelToPlaySound;
-scene.addEventListener('tap', () => playSound());
+scene.addEventListener('tap', (e) => playSound(e));
 // scene.addEventListener('touchend', () => playSound()); // mutes iOS audio, so buggy
-scene.addEventListener('touchstart', () => playSound());
-scene.addEventListener('click', () => playSound());
+scene.addEventListener('touchstart', (e) => playSound(e));
+scene.addEventListener('click', (e) => playSound(e));
 
-function playSound() {
+function playSound(e) {
   if (modelToPlaySound && !modelToPlaySound.getAttribute('clicked')) {
-    if (soundPlaying) {
-      soundPlaying.stopSound();
-    }
-    soundPlaying = modelToPlaySound.components.sound;
-    if (soundPlaying.loaded) {
+    if (modelToPlaySound.components.sound.loaded) {
       playIt();
     } else {
-      soundPlaying.el.addEventListener('sound-loaded', () => playIt());
+      modelToPlaySound.addEventListener('sound-loaded', () => playSound());
     }
 
   }
 }
 
 function playIt() {
+  if (modelPlayingSound) {
+    modelPlayingSound.components.sound.stopSound();
+    modelPlayingSound.emit('sound-ended')
+  }
+  modelPlayingSound = modelToPlaySound;
+
   modelToPlaySound.components.sound.playSound();
   modelToPlaySound.setAttribute('clicked', true);
   modelToPlaySound.click();
@@ -780,9 +782,9 @@ AFRAME.registerComponent('model-material', {
 // });
 
 function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceRoute = true) {
-  let color = 'white';
+  let color = 'black';
   let opacity = '1';
-  let scale = '1 1 1';
+  let scale = '0.5 0.5 1';
   // let text = 'value: This is an event marker!; width: 10;';
 
   let model = document.createElement('a-entity');
@@ -791,26 +793,32 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   model.setAttribute('gltf-model', '#symbol' + markersIndex);
   // model.setAttribute('text', text);
   model.setAttribute('gps-entity-place', `latitude: ${point.lat}; longitude: ${point.lng};`);
-  // model.setAttribute('position', '0 2 0');
+  model.setAttribute('position', '0 2 0');
   // model.setAttribute('position', '0 378 0');
   // model.setAttribute('geometry', 'primitive: sphere');
-  model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true; emissive: #FFF; emissiveIntensity: 1; displacementMap: #wave; displacementScale: 0.0; displacementBias: -0.001;`);
+  model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true; displacementMap: #wave; displacementScale: 0.0; displacementBias: -0.001; normalMap: #wave;`);
   model.setAttribute('model-material');
   // model.setAttribute('refraction-shader', 'marker' + markersIndex);
   model.setAttribute('scale', scale);
   model.setAttribute('sound', 'src: #location' + markersIndex + '; rolloffFactor: 0.1; maxDistance: 3;');
+
   model.setAttribute('animation__rotation', 'property: object3D.rotation.y; from: 0; to: 360; dur: 10000; loop: true; easing: linear; pauseEvents: click;');
+
+  model.setAttribute('animation__color__near', 'property: components.material.material.color; type: color; to: white; dur: 500; startEvents: near;');
+  model.setAttribute('animation__color__far', 'property: components.material.material.color; type: color; to: black; dur: 500; startEvents: far;');
+  model.setAttribute('animation__opacity__sound_ended', 'property: components.material.material.opacity; to: 0; dur: 1000; easing: easeInSine; startEvents: animation-sound-ended;');
+
   model.setAttribute('animation__rotation__click', 'property: object3D.rotation.y; from: 0; to: 360; dur: 1000; loop: true; easing: linear; startEvents: click;');
-  model.setAttribute('animation__material__displacement1__click', 'property: material.displacementBias; from: -0.001; to: 0; dur: 5000; easing: easeInSine; startEvents: click;');
-  model.setAttribute('animation__material__displacement2__click', 'property: material.displacementBias; delay: 5000; from: 0; to: -0.001; dur: 5000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__material__displacement1__click', 'property: components.material.material.displacementBias; from: -0.001; to: 0; dur: 5000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__material__displacement2__click', 'property: components.material.material.displacementBias; delay: 5000; from: 0; to: -0.001; dur: 5000; easing: easeInSine; startEvents: click;');
   // model.setAttribute('animation__opacity1__click', 'property: components.material.material.opacity; from: 1; to: 0; dur: 1000; easing: easeInSine; startEvents: click;');
   // model.setAttribute('animation__opacity2__click', 'property: components.material.material.opacity; delay: 1000; from: 0; to: 1; dur: 1000; easing: easeInSine; startEvents: click;');
-  model.setAttribute('animation__scale__x__up__click', 'property: object3D.scale.x; delay: 0; from: 1; to: 2; dur: 5000; easing: easeInSine; startEvents: click;');
-  model.setAttribute('animation__scale__y__up__click', 'property: object3D.scale.y; delay: 0; from: 1; to: 2; dur: 5000; easing: easeInSine; startEvents: click;');
-  model.setAttribute('animation__scale__z__up__click', 'property: object3D.scale.z; delay: 0; from: 1; to: 2; dur: 5000; easing: easeInSine; startEvents: click;');
-  model.setAttribute('animation__scale__x__down__click', 'property: object3D.scale.x; delay: 5000; from: 2; to: 1; dur: 10000; easing: easeInSine; startEvents: click;');
-  model.setAttribute('animation__scale__y__down__click', 'property: object3D.scale.y; delay: 5000; from: 2; to: 1; dur: 10000; easing: easeInSine; startEvents: click;');
-  model.setAttribute('animation__scale__z__down__click', 'property: object3D.scale.z; delay: 5000; from: 2; to: 1; dur: 10000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__scale__x__up__click', 'property: object3D.scale.x; delay: 0; from: 0.5; to: 1; dur: 5000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__scale__y__up__click', 'property: object3D.scale.y; delay: 0; from: 0.5; to: 1; dur: 5000; easing: easeInSine; startEvents: click;');
+  // model.setAttribute('animation__scale__z__up__click', 'property: object3D.scale.z; delay: 0; from: 1; to: 2; dur: 5000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__scale__x__down__click', 'property: object3D.scale.x; delay: 5000; from: 1; to: 0.5; dur: 10000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__scale__y__down__click', 'property: object3D.scale.y; delay: 5000; from: 1; to: 0.5; dur: 10000; easing: easeInSine; startEvents: click;');
+  // model.setAttribute('animation__scale__z__down__click', 'property: object3D.scale.z; delay: 5000; from: 2; to: 1; dur: 10000; easing: easeInSine; startEvents: click;');
   // model.setAttribute('animation__opacity__click', 'property: components.material.material.opacity; delay: 5000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
   // model.setAttribute('animation__opacity__click', 'property: model-opacity; delay: 1000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
 
@@ -826,8 +834,11 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
 
   model.addEventListener('sound-ended', () => {
     // alert('SOUND ENDED');
-    soundPlaying = null;
+    modelPlayingSound = null;
     if (pointsIndex < points.length) {
+      model.setAttribute('sound-ended');
+      model.emit('animation-sound-ended');
+
       // alert('SOUND ENDED - ADVANCE');
       models.forEach(m => m.parentNode.removeChild(m));
       models = [];
@@ -885,12 +896,9 @@ function getWayPoint(point, points, markers, pointsIndex, markersIndex, doAdvanc
   model.setAttribute('scale', scale);
   // model.setAttribute('animation__scale__click', 'property: scale; to: 3 3 3; dur: 2000; easing: easeInOutSine; startEvents: click;');
   // model.setAttribute('animation__opacity__click', 'property: material.opacity; to: 0; dur: 2000; easing: easeInOutSine; startEvents: click;');
-  model.setAttribute('animation__rotation__click', 'property: object3D.rotation.x; from: 90; to: 450; dur: 4000; easing: linear; loop: true; startEvents: click;');
+  // model.setAttribute('animation__color__near', 'property: components.material.material.color; type: color; to: white; dur: 500; startEvents: near;');
+  model.setAttribute('animation__rotation__near', 'property: object3D.rotation.x; from: 90; to: 450; dur: 4000; easing: linear; loop: true; startEvents: near;');
   // model.setAttribute('animation__material__displacement1__click', 'property: material.displacementBias; from: 0; to: -0.005; dur: 1000; easing: easeInSine; startEvents: click;');
-
-  model.addEventListener('click', () => {
-    model.setAttribute('clicked', true);
-  });
 
   registerModel(model, pointsIndex, false);
 
@@ -932,35 +940,33 @@ function registerModel(model, index, isMarker = true, isWaypointSphere = false) 
         let elPos = model.object3D.position;
         let distance = camPos.distanceTo(elPos);
 
-        // set the near by marker model to play its sound on window click
-        if (distance < 10) {
-          if (isMarker) {
-            modelToPlaySound = model;
+        if (distance) {
+          if (distance < 10) {
+            if (!model.getAttribute('near')) {
+              model.setAttribute('near');
+              model.emit('near');
+            }
+
+            if (isMarker) {
+              modelToPlaySound = model;
+            }
           } else {
-            if (!model.getAttribute('clicked')) {
-              model.click();
+            if (model.getAttribute('near')) {
+              if (isMarker && !model.getAttribute('clicked')) {
+                model.removeAttribute('near');
+                model.emit('far');
+              }
             }
           }
-        }
 
-        // opacity based on distance
-        if (distance) {
-          let opacity = Math.min(1, 6 / distance);
-          // el.setAttribute('material', 'opacity: ' + Math.min(1, 20 / distance) + ';');
-          const mesh = el.getObject3D('mesh');
-          if (mesh) {
-            mesh.material.opacity = opacity;
-
-            mesh.traverse((node) => {
-              if (node.isMesh) {
-                node.material.opacity = opacity;
-                if (node.material.uniforms) {
-                  node.material.uniforms.opacity.value = opacity;
-                }
-              }
-            });
+          if (!model.getAttribute('sound-ended')) {
+            const mesh = el.getObject3D('mesh');
+            if (mesh) {
+              // opacity based on distance
+              let opacity = Math.min(1, 6 / distance);
+              mesh.material.opacity = opacity;
+            }
           }
-
         }
       }
     });
