@@ -29,7 +29,7 @@ function playSound() {
     if (soundPlaying.loaded) {
       playIt();
     } else {
-      soundPlaying.addEventListener('sound-loaded', () => playIt());
+      soundPlaying.el.addEventListener('sound-loaded', () => playIt());
     }
 
   }
@@ -791,7 +791,7 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   model.setAttribute('gltf-model', '#symbol' + markersIndex);
   // model.setAttribute('text', text);
   model.setAttribute('gps-entity-place', `latitude: ${point.lat}; longitude: ${point.lng};`);
-  model.setAttribute('position', '0 2 0');
+  // model.setAttribute('position', '0 2 0');
   // model.setAttribute('position', '0 378 0');
   // model.setAttribute('geometry', 'primitive: sphere');
   model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true; emissive: #FFF; emissiveIntensity: 1; displacementMap: #wave; displacementScale: 0.0; displacementBias: -0.001;`);
