@@ -4,6 +4,9 @@
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+
+  <link rel="stylesheet" href="styles-ar.css">
+
   <title>Hidden Destinations / AR</title>
 
   <script src="js/third-party/aframe/aframe.min.js"></script>
@@ -17,6 +20,11 @@
     <div class="loading"></div>
   </div>
 
+  <div id="recButtons">
+    <button id="startButton">REC</button>
+    <button id="stopButton">STOP</button>
+  </div>
+
   <a-scene vr-mode-ui="enabled: false" embedded arjs='trackingMethod: best; sourceType: webcam; debugUIEnabled: false;'>
     <a-assets>
       <audio id="location1" src="assets/audio/location1.mp3" preload="auto"></audio>
@@ -28,7 +36,7 @@
       <audio id="location7" src="assets/audio/location7.mp3"></audio>
       <audio id="location8" src="assets/audio/location8.mp3"></audio>
       <audio id="location9" src="assets/audio/location9.mp3"></audio>
-      
+
       <img id="wave" src="assets/img/wave.png">
 
       <a-asset-item id="arrow1" src="assets/3d/arrow1.glb"></a-asset-item>
@@ -55,5 +63,6 @@
     </a-camera>
   </a-scene>
 
-  <script src="./js/ar.js"></script>
+  <script src="js/ar.js"></script>
+  <script src="js/record.js"></script>
 </body>

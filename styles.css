@@ -1,10 +1,15 @@
 body {
-  overflow-x: hidden;
   margin: 0 auto;
   text-align: center;
   font-size: 1em;
   font-family: 'Beth Ellen', cursive;
+  overflow: hidden;
+}
+
+body > div {
+  position: absolute;
   padding: 1em 3em;
+  overflow-x: hidden;
 }
 
 a {
@@ -20,7 +25,7 @@ ul, dl {
 .back {
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
   pointer-events: none;
 }
 

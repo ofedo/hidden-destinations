@@ -31,3 +31,29 @@
   border-top-color: white;
   animation: spin 1s infinite linear;
 }
+
+#recButtons {
+  position: absolute;
+  bottom: 20px;
+  text-align: center;
+  left: 5px;
+  right: 5px;
+  z-index: 2;
+}
+
+#recButtons button {
+  display: none;
+  background: red;
+  border-radius: 50%;
+  font-size: 7.5px;
+  color: white;
+  text-align: center;
+  height: 50px;
+  width: 50px;
+  padding: 0;
+  outline: none;
+}
+
+#startButton {
+  border: 12px outset white;
+}
