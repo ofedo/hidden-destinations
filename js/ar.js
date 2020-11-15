@@ -3,6 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
   var splash = document.querySelector('#splash');
   scene.addEventListener('loaded', function(e) {
     splash.style.display = 'none';
+
+    // let screenshotButton = document.querySelector('#screenshotButton');
+    // screenshotButton.style.display = 'inline-block';
+    // screenshotButton.addEventListener('click', () => {
+    //   scene.components.screenshot.capture('perspective');
+    // });
   });
 });
 

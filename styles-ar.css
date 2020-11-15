@@ -42,8 +42,7 @@
 }
 
 #recButtons button {
-  display: none;
-  background: red;
+  cursor: pointer;
   border-radius: 50%;
   font-size: 7.5px;
   color: white;
@@ -54,6 +53,17 @@
   outline: none;
 }
 
+#screenshotButton,
+#startButton,
+#stopButton {
+  display: none;
+  background: red;
+}
+
 #startButton {
   border: 12px outset white;
+}
+
+#screenshotButton {
+  background: lightgray;
 }

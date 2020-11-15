@@ -35,6 +35,31 @@ function setVideoToSceneBackground() {
   texture.magFilter = THREE.LinearFilter;
   texture.format = THREE.RGBFormat;
   scene.object3D.background = texture;
+
+  video.addEventListener('canplay', e => resizeContainer(e));
+}
+
+function resizeContainer(e) {
+  let videoWidth = video.videoWidth;
+  let videoHeight = video.videoHeight;
+  let videoAspect = videoWidth / videoHeight;
+  let width = scene.offsetWidth;
+  let height = scene.offsetHeight;
+  if (videoAspect > 1) {
+    width = height * videoAspect;
+  } else {
+    height = width / videoAspect;
+  }
+  // setTimeout(() => {
+    // scene.canvas.setAttribute('width', width);
+    // scene.canvas.setAttribute('height', height);
+    // scene.canvas.width = width;
+    // scene.canvas.height = height;
+    scene.renderer.setSize(width, height);
+    scene.camera.aspect = videoAspect;
+    scene.camera.updateProjectionMatrix();
+    console.log(width);
+  // }, 3000);
 }
 
 function initUserMedia(startRecord = false) {
@@ -42,7 +67,7 @@ function initUserMedia(startRecord = false) {
     navigator.mediaDevices.getUserMedia({
       // video: true,
       audio: true
-      }).then((stream) => {
+    }).then((stream) => {
       if (startRecord) {
         startRecording(stream, recordingTimeMS);
       }
