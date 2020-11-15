@@ -871,7 +871,7 @@ AFRAME.registerComponent('model-material', {
 function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceRoute = true) {
   let color = 'black';
   let opacity = '1';
-  let scale = '0.5 0.5 1';
+  let scale = '1 1 1';
   // let text = 'value: This is an event marker!; width: 10;';
 
   let model = document.createElement('a-entity');
@@ -880,7 +880,7 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   model.setAttribute('gltf-model', '#symbol' + markersIndex);
   // model.setAttribute('text', text);
   model.setAttribute('gps-entity-place', `latitude: ${point.lat}; longitude: ${point.lng};`);
-  model.setAttribute('position', '0 2 0');
+  // model.setAttribute('position', '0 2 0');
   // model.setAttribute('position', '0 378 0');
   // model.setAttribute('geometry', 'primitive: sphere');
   model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true; displacementMap: #wave; displacementScale: 0.0; displacementBias: -0.001; normalMap: #wave;`);
@@ -900,11 +900,11 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   model.setAttribute('animation__material__displacement2__click', 'property: components.material.material.displacementBias; delay: 5000; from: 0; to: -0.001; dur: 5000; easing: easeInSine; startEvents: click;');
   // model.setAttribute('animation__opacity1__click', 'property: components.material.material.opacity; from: 1; to: 0; dur: 1000; easing: easeInSine; startEvents: click;');
   // model.setAttribute('animation__opacity2__click', 'property: components.material.material.opacity; delay: 1000; from: 0; to: 1; dur: 1000; easing: easeInSine; startEvents: click;');
-  model.setAttribute('animation__scale__x__up__click', 'property: object3D.scale.x; delay: 0; from: 0.5; to: 1; dur: 5000; easing: easeInSine; startEvents: click;');
-  model.setAttribute('animation__scale__y__up__click', 'property: object3D.scale.y; delay: 0; from: 0.5; to: 1; dur: 5000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__scale__x__up__click', 'property: object3D.scale.x; delay: 0; from: 1; to: 2; dur: 5000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__scale__y__up__click', 'property: object3D.scale.y; delay: 0; from: 1; to: 2; dur: 5000; easing: easeInSine; startEvents: click;');
   // model.setAttribute('animation__scale__z__up__click', 'property: object3D.scale.z; delay: 0; from: 1; to: 2; dur: 5000; easing: easeInSine; startEvents: click;');
-  model.setAttribute('animation__scale__x__down__click', 'property: object3D.scale.x; delay: 5000; from: 1; to: 0.5; dur: 10000; easing: easeInSine; startEvents: click;');
-  model.setAttribute('animation__scale__y__down__click', 'property: object3D.scale.y; delay: 5000; from: 1; to: 0.5; dur: 10000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__scale__x__down__click', 'property: object3D.scale.x; delay: 5000; from: 2; to: 1; dur: 10000; easing: easeInSine; startEvents: click;');
+  model.setAttribute('animation__scale__y__down__click', 'property: object3D.scale.y; delay: 5000; from: 2; to: 1; dur: 10000; easing: easeInSine; startEvents: click;');
   // model.setAttribute('animation__scale__z__down__click', 'property: object3D.scale.z; delay: 5000; from: 2; to: 1; dur: 10000; easing: easeInSine; startEvents: click;');
   // model.setAttribute('animation__opacity__click', 'property: components.material.material.opacity; delay: 5000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
   // model.setAttribute('animation__opacity__click', 'property: model-opacity; delay: 1000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
