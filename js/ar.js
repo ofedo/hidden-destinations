@@ -904,7 +904,7 @@ function getWayPoint(point, points, markers, pointsIndex, markersIndex, doAdvanc
   model.setAttribute('scale', scale);
   // model.setAttribute('animation__scale__click', 'property: scale; to: 3 3 3; dur: 2000; easing: easeInOutSine; startEvents: click;');
   // model.setAttribute('animation__opacity__click', 'property: material.opacity; to: 0; dur: 2000; easing: easeInOutSine; startEvents: click;');
-  // model.setAttribute('animation__color__near', 'property: components.material.material.color; type: color; to: white; dur: 500; startEvents: near;');
+  model.setAttribute('animation__color__near', 'property: components.material.material.color; type: color; to: white; dur: 500; startEvents: near;');
   model.setAttribute('animation__rotation__near', 'property: object3D.rotation.x; from: 90; to: 450; dur: 4000; easing: linear; loop: true; startEvents: near;');
   // model.setAttribute('animation__material__displacement1__click', 'property: material.displacementBias; from: 0; to: -0.005; dur: 1000; easing: easeInSine; startEvents: click;');
 
