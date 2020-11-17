@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <title>Hidden Destinations / Disclaimer </title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    h1 {
+      color: red;
+    }
+
+    p {
+      line-height: 28px;
+    }
+
+    label {
+      user-select: none;
+      cursor: pointer;
+    }
+
+    input {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      margin: 10px;
+      vertical-align: middle;
+      cursor: pointer;
+    }
+
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 20px 40px;
+      border-radius: 40px;
+      outline: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <div>
+      <h1>DISCLAIMER</h1>
+      <p>Please watch your step through the garden and walk only over the furnished alleyways! <br />
+        You hereby agree that the artists, developers, partners and sponsors of this application cannot be held responsible for any loss, damage, or injury, including but not limited to suffering and death, that may be sustained while using this
+        application.
+      </p>
+
+      <label><input id="checkbox" type="checkbox" onclick="toggleCheckbox()" autocomplete="off">I understand and agree</label>
+
+      <button id="continue-btn" disabled onclick="window.location='ar.html'">Continue</button>
+
+      <small>The app requires access to your device's camera, geolocation and motion sensors to work.
+        Please allow access when asked. We do not collect or store any of your data.
+        If you can't hear any audio, make sure your device is in Ring mode and not in Silent mode.
+      </small>
+    </div>
+
+  </div>
+
+</body>
+
+<script>
+  var checkbox = document.querySelector('#checkbox');
+  var continueBtn = document.querySelector('#continue-btn');
+
+  checkbox.addEventListener('click', () => toggleCheckbox());
+
+  function toggleCheckbox() {
+    if (checkbox.checked) {
+      continueBtn.removeAttribute('disabled');
+    } else {
+      continueBtn.setAttribute('disabled', 'disabled');
+    }
+  }
+</script>

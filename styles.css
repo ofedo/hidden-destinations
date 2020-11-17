@@ -3,13 +3,33 @@ body {
   text-align: center;
   font-size: 1em;
   font-family: 'Beth Ellen', cursive;
-  overflow: hidden;
 }
 
-body > div {
+body>div {
   position: absolute;
-  padding: 1em 3em;
+  /* padding: 3em 0; */
   overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+h1, h3, p, li, dt, dd {
+  background: #ffffffbb;
+  box-shadow: 0 0 20px 10px #ffffffbb;
+  padding: 5px 30px;
+  /* border-color: white;
+  border-style: dashed;
+  border-width: 5px; */
+  border-radius: 5px;
+}
+
+h1 {
+  padding-top: 50px;
+}
+
+dd {
+  font-size: 1.2em;
+  font-weight: bold;
 }
 
 a {
@@ -18,8 +38,31 @@ a {
 
 ul, dl {
   list-style: bengali;
+  list-style-position: inside;
   width: fit-content;
   margin: 0 auto;
+  padding: 0;
+  text-align: left;
+}
+
+.menu {
+  font-size: 1.2em;
+}
+
+.map {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url(assets/img/map.jpg);
+  background-position: center;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+  mix-blend-mode: color;
+  z-index: -1;
+  transform: translateZ(0px);
 }
 
 .back {
@@ -34,10 +77,11 @@ ul, dl {
   height: 300%;
   width: 300%;
   top: -120%;
-  right: -200%;
-  background-size: 30px;
+  right: -120%;
+  background-size: 2em;
   background-image: url("./assets/img/wave.png");
   animation: slide 3s infinite linear;
+  z-index: -2;
   transform: translateZ(0);
 }
 
@@ -45,12 +89,13 @@ ul, dl {
   position: absolute;
   height: 200%;
   width: 200%;
-  top: -50%;
-  right: 50%;
+  top: -5%;
+  right: 5%;
   background-size: 30px;
   background-image: url("./assets/img/wave.png");
   animation: slide 3s infinite linear;
   animation-direction: reverse;
+  z-index: -2;
   transform: translateZ(0);
 }
 
