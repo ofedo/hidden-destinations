@@ -1,15 +1,17 @@
 #splash {
+  background: white;
   position: absolute;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  width: 200px;
-  height: 200px;
   margin: auto;
+  padding: 10px;
   z-index: 1;
 }
 
@@ -26,6 +28,7 @@
 .loading {
   width: 24px;
   height: 24px;
+  margin-bottom: 200px;
   border-radius: 50%;
   border: 0.25rem solid rgba(0, 0, 0, 0.2);
   border-top-color: white;
@@ -66,4 +69,17 @@
 
 #screenshotButton {
   background: lightgray;
+}
+
+body {
+  font-family: sans-serif; 
+}
+
+.a-dialog-allow-button {
+  width: 100% !important;
+  background-color: #20b2aa !important;
+}
+
+.a-dialog-deny-button {
+  display: none !important;
 }

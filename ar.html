@@ -18,6 +18,10 @@
 
   <div id="splash">
     <div class="loading"></div>
+    <small>The app requires access to your device's camera, geolocation and motion sensors to work.
+      Please allow access when asked. We do not collect or store any of your data.
+      If you can't hear any audio, make sure your device is in Ring mode and not in Silent mode.
+    </small>
   </div>
 
   <div id="recButtons">
@@ -26,8 +30,8 @@
     <button id="stopButton">STOP</button>
   </div>
 
-  <a-scene vr-mode-ui="enabled: false" embedded arjs='trackingMethod: best; sourceType: webcam; debugUIEnabled: false;'>
-    <a-assets>
+  <a-scene vr-mode-ui="enabled: false" embedded arjs='trackingMethod: best; sourceType: webcam; debugUIEnabled: false;' device-orientation-permission-ui="allowButtonText: OK">
+    <a-assets timeout="10000">
       <audio id="location1" src="assets/audio/location1.mp3" preload="auto"></audio>
       <audio id="location2" src="assets/audio/location2.mp3"></audio>
       <audio id="location3" src="assets/audio/location3.mp3"></audio>

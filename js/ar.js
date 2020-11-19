@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-  var scene = document.querySelector('a-scene');
   var splash = document.querySelector('#splash');
-  scene.addEventListener('loaded', function(e) {
+
+  window.addEventListener('arjs-video-loaded', (e) => {
     splash.style.display = 'none';
 
     // let screenshotButton = document.querySelector('#screenshotButton');
@@ -804,7 +804,7 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   // model.setAttribute('position', '0 2 0');
   // model.setAttribute('position', '0 378 0');
   // model.setAttribute('geometry', 'primitive: sphere');
-  model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true; displacementMap: #wave; displacementScale: 0.0; displacementBias: -0.001; normalMap: #wave;`);
+  model.setAttribute('material', `color: ${color}; opacity: ${opacity}; transparent: true; displacementMap: #wave; displacementScale: 0.0; displacementBias: -0.001;`);
   model.setAttribute('model-material');
   // model.setAttribute('refraction-shader', 'marker' + markersIndex);
   model.setAttribute('scale', scale);
@@ -964,6 +964,10 @@ function registerModel(model, index, isMarker = true, isWaypointSphere = false) 
                 model.removeAttribute('near');
                 model.emit('far');
               }
+            }
+            
+            if (modelToPlaySound === model) {
+              modelToPlaySound = null;
             }
           }
 

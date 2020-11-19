@@ -42,7 +42,22 @@
       padding: 20px 40px;
       border-radius: 40px;
       outline: none;
+      font-size: 14px;
       cursor: pointer;
+      background: #20b2aa;
+      border: 2px outset gray;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+
+    button:focus,
+    button:active {
+      border-style: inset;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      background: lightgray;
+      border-color: transparent;
     }
   </style>
 </head>
@@ -51,19 +66,15 @@
   <div>
     <div>
       <h1>DISCLAIMER</h1>
-      <p>Please watch your step through the garden and walk only over the furnished alleyways! <br />
+      <p>Please watch your step through the garden and walk only over the furnished alleyways! <br /><br />
         You hereby agree that the artists, developers, partners and sponsors of this application cannot be held responsible for any loss, damage, or injury, including but not limited to suffering and death, that may be sustained while using this
         application.
       </p>
 
       <label><input id="checkbox" type="checkbox" onclick="toggleCheckbox()" autocomplete="off">I understand and agree</label>
 
-      <button id="continue-btn" disabled onclick="window.location='ar.html'">Continue</button>
+      <button id="continue-btn" disabled="disabled" onclick="window.location='ar.html'" ontouchstart="">Continue</button>
 
-      <small>The app requires access to your device's camera, geolocation and motion sensors to work.
-        Please allow access when asked. We do not collect or store any of your data.
-        If you can't hear any audio, make sure your device is in Ring mode and not in Silent mode.
-      </small>
     </div>
 
   </div>
@@ -71,9 +82,10 @@
 </body>
 
 <script>
-  var checkbox = document.querySelector('#checkbox');
   var continueBtn = document.querySelector('#continue-btn');
+  continueBtn.setAttribute('disabled', 'disabled');
 
+  var checkbox = document.querySelector('#checkbox');
   checkbox.addEventListener('click', () => toggleCheckbox());
 
   function toggleCheckbox() {
@@ -83,4 +95,9 @@
       continueBtn.setAttribute('disabled', 'disabled');
     }
   }
+
+  window.addEventListener('pagehide', () => {
+    checkbox.checked = false;
+    continueBtn.setAttribute('disabled', 'disabled');
+  });
 </script>
