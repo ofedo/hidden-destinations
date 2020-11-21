@@ -14,32 +14,48 @@
 </head>
 
 <body>
-  <h1>Hidden Destinations</h1>
-  <h3>an interactive AR experience using geolocation inside the "Alexandru Borza" Botanical Garden of Cluj-Napoca</h3>
-  <br />
-  <p>Designed as an introspective journey through the garden,<br /> it seeks to guide you on a path towards yourself and aid you to</p>
-  <ul>
-    <li>create room for your thoughts and feelings,</li>
-    <li>connect with your internal representations,</li>
-    <li>explore your imagination and</li>
-    <li>cultivate the capacity to work with your senses.</li>
-  </ul>
-  <br />
 
-  <a href='disclaimer.html'>Start journey</a>
+  <div class="above">
+    <h1>Hidden Destinations</h1>
+    <h3>an interactive AR experience using geolocation inside the "Alexandru Borza" Botanical Garden of Cluj-Napoca</h3>
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+    <br />
+    <p>Designed as an introspective journey through the garden,<br /> it seeks to guide you on a path towards yourself and aid you to</p>
+    <ul>
+      <li>create room for your thoughts and feelings,</li>
+      <li>connect with your internal representations,</li>
+      <li>explore your imagination and</li>
+      <li>cultivate the capacity to work with your senses.</li>
+    </ul>
+    <br />
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+    <p>When you start the journey, your phone’s camera is activated. Look around you and find the arrows on the screen.</p>
+    <div tabindex="0" class="arrow"><img src="assets/svg/arrow1c.svg" alt="arrow1" width="10"></div>
+    <div tabindex="0" class="arrow"><img src="assets/svg/arrow2c.svg" alt="arrow2" width="10"></div>
+    <div tabindex="0" class="arrow"><img src="assets/svg/arrow3c.svg" alt="arrow3" width="10"></div>
+    <p>They will lead you to a location marked with a symbol that lights up when you are close enough.
+      You can then tap the screen to activate it and listen to an audio recording.</p>
 
-  <br /><br /><br />
-  <br /><br /><br />
-  <br /><br /><br />
-  <br /><br /><br />
+    <div class="symbol"><img src="assets/svg/symbol2c.svg" alt="symbol2" width="10" /></div>
+    <div tabindex="0" class="symbol symbol-active" onclick="document.getElementById('audio').play();"><img src="assets/svg/symbol1c.svg" alt="symbol1" width="30" /></div>
+    <div class="symbol"><img src="assets/svg/symbol9c.svg" alt="symbol9" width="10" /></div>
+    <audio id="audio" src="assets/audio/audio-test.mp3" style="display: hidden;"></audio>
+    <p>When the voice guided experience is over, continue to follow the arrows towards the next symbol.
+      There are 9 locations to be found across the garden. Ready?</p>
+    <a href='disclaimer.html'>Start journey</a>
 
-  <a target="_blank" href="./assets/img/google-maps-route.jpg">See the map</a>
-  <br />
-  <a href='credits.html'>Credits</a>
-  <br />
-  <br />
-  <br />
+    <br /><br /><br />
+    <br /><br /><br />
+    <br /><br /><br />
+    <br /><br /><br />
 
+    <a target="_blank" href="./assets/img/google-maps-route.jpg">See the map</a>
+    <br />
+    <a href='credits.html'>Credits</a>
+    <br />
+    <br />
+    <br />
+  </div>
   <div class="map"></div>
   <div class="back">
     <div class="gradient1 angle1"></div>
