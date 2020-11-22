@@ -3217,23 +3217,23 @@ ARjs.Source.prototype.copyElementSizeTo = function(otherElement){
 */
 
 ARjs.Source.prototype.copyElementSizeTo = function (otherElement) {
-
-    if (window.innerWidth > window.innerHeight) {
-        //landscape
-        otherElement.style.width = this.domElement.style.width
-        otherElement.style.height = this.domElement.style.height
-        otherElement.style.marginLeft = this.domElement.style.marginLeft
-        otherElement.style.marginTop = this.domElement.style.marginTop
-    }
-    else {
-        //portrait
-        otherElement.style.height = this.domElement.style.height
-        otherElement.style.width = (parseInt(otherElement.style.height) * 4 / 3) + "px";
-        otherElement.style.marginLeft = ((window.innerWidth - parseInt(otherElement.style.width)) / 2) + "px";
-        otherElement.style.marginTop = 0;
-    }
-
+  if (window.innerWidth > window.innerHeight) {
+		// landscape
+    otherElement.style.width = this.domElement.style.width
+    const height = parseInt(otherElement.style.width) * 3 / 4
+    otherElement.style.height = height + 'px'
+    otherElement.style.marginLeft = 0
+    otherElement.style.marginTop = ((window.innerHeight - height) / 2) + 'px'
+  } else {
+		// portrait
+    otherElement.style.height = this.domElement.style.height
+    const width = parseInt(otherElement.style.height) * 4 / 3
+    otherElement.style.width = width + 'px'
+    otherElement.style.marginLeft = ((window.innerWidth - width) / 2) + 'px'
+    otherElement.style.marginTop = 0
+  }
 }
+
 
 //////////////////////////////////////////////////////////////////////////////
 //		Code Separator
@@ -6113,7 +6113,7 @@ AFRAME.registerComponent('gps-camera', {
             // iOS 13+
             if (typeof DeviceOrientationEvent.requestPermission === 'function') {
                 var handler = function () {
-                    console.log('Requesting device orientation permissions...')
+                    // console.log('Requesting device orientation permissions...')
                     DeviceOrientationEvent.requestPermission();
                     document.removeEventListener('touchend', handler);
                 };
@@ -6398,7 +6398,7 @@ AFRAME.registerComponent('gps-camera', {
             if (event.webkitCompassAccuracy < 50) {
                 this.heading = event.webkitCompassHeading;
             } else {
-                console.warn('webkitCompassAccuracy is event.webkitCompassAccuracy');
+                // console.warn('webkitCompassAccuracy is event.webkitCompassAccuracy');
             }
         } else if (event.alpha !== null) {
             if (event.absolute === true || event.absolute === undefined) {
@@ -6673,7 +6673,7 @@ AFRAME.registerComponent('gps-projected-camera', {
             // iOS 13+
             if (typeof DeviceOrientationEvent.requestPermission === 'function') {
                 var handler = function() {
-                    console.log('Requesting device orientation permissions...')
+                    // console.log('Requesting device orientation permissions...')
                     DeviceOrientationEvent.requestPermission();
                     document.removeEventListener('touchend', handler);
                 };

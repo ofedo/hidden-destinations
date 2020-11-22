@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+
+  <link rel="stylesheet" href="styles-ar.css">
+
+  <title>Hidden Destinations / Sim</title>
+
+  <script src="./js/third-party/aframe/aframe.min.js"></script>
+  <script src="./js/third-party/ar-js-org/aframe-ar.js"></script>
+  <script src="./js/third-party/aframe-extras/aframe-extras.controls.min.js"></script>
+  <script src="./js/third-party/superframe/aframe-proxy-event-component.min.js"></script>
+  <script src="./js/third-party/superframe/aframe-event-set-component.min.js"></script>
+
+</head>
+
+<body style='margin: 0; overflow: hidden;'>
+
+  <div id="splash">
+    <div class="loading"></div>
+    <!-- <small>The app requires access to your device's camera, geolocation and motion sensors to work.
+      Please allow access when asked. We do not collect or store any of your data.
+      If you can't hear any audio, make sure your device is in Ring mode and not in Silent mode.
+    </small> -->
+  </div>
+
+  <a-scene background="color: black" vr-mode-ui="enabled: false" embedded arjs='sourceType: image; sourceUrl: assets/img/panorama/2048/panorama0.jpg; debugUIEnabled: false;' device-orientation-permission-ui="allowButtonText: OK">
+    <a-assets timeout="30000">
+      <audio id="location1" src="assets/audio/location1.mp3" preload="auto"></audio>
+      <audio id="location2" src="assets/audio/location2.mp3"></audio>
+      <audio id="location3" src="assets/audio/location3.mp3"></audio>
+      <audio id="location4" src="assets/audio/location4.mp3"></audio>
+      <audio id="location5" src="assets/audio/location5.mp3"></audio>
+      <audio id="location6" src="assets/audio/location6.mp3"></audio>
+      <audio id="location7" src="assets/audio/location7.mp3"></audio>
+      <audio id="location8" src="assets/audio/location8.mp3"></audio>
+      <audio id="location9" src="assets/audio/location9.mp3"></audio>
+
+      <img id="wave" src="assets/img/wave.png">
+
+      <img id="panorama0" src="assets/img/panorama/2048/panorama0.jpg">
+      <img id="panorama1" src="assets/img/panorama/2048/panorama1.jpg">
+      <img id="panorama2" src="assets/img/panorama/2048/panorama2.jpg">
+      <img id="panorama3" src="assets/img/panorama/2048/panorama3.jpg">
+      <img id="panorama4" src="assets/img/panorama/2048/panorama4.jpg">
+      <img id="panorama5" src="assets/img/panorama/2048/panorama5.jpg">
+      <img id="panorama6" src="assets/img/panorama/2048/panorama6.jpg">
+      <img id="panorama7" src="assets/img/panorama/2048/panorama7.jpg">
+      <img id="panorama8" src="assets/img/panorama/2048/panorama8.jpg">
+      <img id="panorama9" src="assets/img/panorama/2048/panorama9.jpg">
+      <a-asset-item id="arrow1" src="assets/3d/arrow1.glb"></a-asset-item>
+      <a-asset-item id="arrow2" src="assets/3d/arrow2.glb"></a-asset-item>
+      <a-asset-item id="arrow3" src="assets/3d/arrow3.glb"></a-asset-item>
+      <a-asset-item id="symbol1" src="assets/3d/symbol1.glb"></a-asset-item>
+      <a-asset-item id="symbol2" src="assets/3d/symbol2.glb"></a-asset-item>
+      <a-asset-item id="symbol3" src="assets/3d/symbol3.glb"></a-asset-item>
+      <a-asset-item id="symbol4" src="assets/3d/symbol4.glb"></a-asset-item>
+      <a-asset-item id="symbol5" src="assets/3d/symbol5.glb"></a-asset-item>
+      <a-asset-item id="symbol6" src="assets/3d/symbol6.glb"></a-asset-item>
+      <a-asset-item id="symbol7" src="assets/3d/symbol7.glb"></a-asset-item>
+      <a-asset-item id="symbol8" src="assets/3d/symbol8.glb"></a-asset-item>
+      <a-asset-item id="symbol9" src="assets/3d/symbol9.glb"></a-asset-item>
+    </a-assets>
+
+    <a-entity id="rig" movement-controls="speed: 1" rotation="0 130 0">
+      <a-camera wasd-controls-enabled="false" look-controls="pointerLockEnabled: true" gps-camera='gpsMinDistance: 5; simulateLatitude: 46.76271211088994; simulateLongitude: 23.58878947987061;'>
+      </a-camera>
+    </a-entity>
+    
+     <a-sky id="sky00" radius="500" src="#panorama0" transparent="true" position="-120 0 140">
+     </a-sky>
+     <a-sky id="sky01" radius="500" src="#panorama1" transparent="true" position="-120 0 140">
+     </a-sky>
+
+  </a-scene>
+
+  <script src="./js/ar.js"></script>
+</body>

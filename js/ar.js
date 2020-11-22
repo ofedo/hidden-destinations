@@ -16,6 +16,10 @@ let scene = document.querySelector('a-scene');
 let camera = document.querySelector('a-camera');
 let rig = document.querySelector('#rig');
 
+let sky00 = document.querySelector('#sky00');
+let sky01 = document.querySelector('#sky01');
+let clickedMarkerIndex = 0;
+
 let videoElement;
 let modelPlayingSound;
 
@@ -47,6 +51,8 @@ function playIt() {
   modelToPlaySound.components.sound.playSound();
   modelToPlaySound.setAttribute('clicked', true);
   modelToPlaySound.click();
+
+  clickedMarkerIndex++;
 }
 
 
@@ -830,9 +836,12 @@ function getMarker(point, points, markers, pointsIndex, markersIndex, doAdvanceR
   // model.setAttribute('animation__opacity__click', 'property: components.material.material.opacity; delay: 5000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
   // model.setAttribute('animation__opacity__click', 'property: model-opacity; delay: 1000; from: 1; to: 0; dur: 10000; easing: easeInSine; startEvents: click;');
 
-  // model.setAttribute('event-set__click', '_target: #sky0'+ ((markersIndex - 1) % 2) +'; _delay: 1000; material.src: #panorama' + (markersIndex + 1) + '');
-  // model.setAttribute('proxy-event__fadein', 'event: click; to: #sky0' + (markersIndex  % 2) + '; as: fadein');
-  // model.setAttribute('proxy-event__fadeout', 'event: click; to: #sky0' + ((markersIndex - 1)  % 2) + '; as: fadeout');
+  // model.setAttribute('event-set__sound-ended', '_target: #sky0' + ((markersIndex - 1) % 2) + '; _delay: 0; material.src: #panorama' + (markersIndex + 1) + '');
+  model.setAttribute('event-set__click', '_target: #sky0' + ((markersIndex - 1) % 2) + '; _delay: 0; material.src: #panorama' + (markersIndex + 1 > 9 ? 1 : markersIndex + 1) + '');
+
+
+  // model.setAttribute('proxy-event__fadein', 'event: near; to: #sky0' + (markersIndex % 2) + '; as: fadein');
+  // model.setAttribute('proxy-event__fadeout', 'event: near; to: #sky0' + ((markersIndex - 1) % 2) + '; as: fadeout');
 
   // model.setAttribute('event-set__click', '_target: #sky; _delay: 300; material.src: #panorama' + (markersIndex) + '');
   // model.setAttribute('proxy-event', 'event: click; to: #sky; as: fade');
@@ -965,7 +974,7 @@ function registerModel(model, index, isMarker = true, isWaypointSphere = false) 
                 model.emit('far');
               }
             }
-            
+
             if (modelToPlaySound === model) {
               modelToPlaySound = null;
             }
@@ -980,9 +989,48 @@ function registerModel(model, index, isMarker = true, isWaypointSphere = false) 
             }
           }
         }
+
+        if (sky00 && sky01) {
+          if (model.id === 'marker' + (clickedMarkerIndex + 1 > 9 ? 9 : clickedMarkerIndex + 1)) {
+
+            let prevLocation = (clickedMarkerIndex === 0 ? document.querySelector('#waypoint1') : document.querySelector('#marker' + clickedMarkerIndex));
+            let nextLocation = (clickedMarkerIndex === 9 ? document.querySelector('#waypoint1') : document.querySelector('#marker' + (clickedMarkerIndex + 1)));
+
+            if (prevLocation && nextLocation) {
+              let prevLocationPos = prevLocation.object3D.position;
+              let nextLocationPos = nextLocation.object3D.position;
+
+              let distancePrevNextLocation = prevLocationPos.distanceTo(nextLocationPos);
+              let distanceToNextLocation = camPos.distanceTo(nextLocationPos);
+              if (distancePrevNextLocation && distanceToNextLocation) {
+                let skyToFadeIn = sky00;
+                let skyToFadeOut = sky01;
+                if (clickedMarkerIndex % 2) {
+                  skyToFadeIn = sky01;
+                  skyToFadeOut = sky00;
+                }
+                skyToFadeIn.components.material.material.opacity = 1 - Math.min(1, (distancePrevNextLocation - distanceToNextLocation) / distancePrevNextLocation);
+                skyToFadeOut.components.material.material.opacity = Math.min(1, (distancePrevNextLocation - distanceToNextLocation) / distancePrevNextLocation);
+
+                // console.log('radius1 ' + (Math.min(200, 50000 / distance)));
+                // console.log('radius2 ' + (500 - Math.min(200, 50000 / distance)));
+                // skyToFadeOut.components.geometry.geometry.metadata.parameters.radius = 500 + Math.min(200, 1000 / distance);
+                // skyToFadeIn.components.geometry.geometry.metadata.parameters.radius = 500 - Math.min(200, 1000 / distance);
+              }
+            }
+          }
+        }
       }
     });
 
+    if (sky00 && sky01) {
+      if (!isMarker && index === 1) {
+        sky00.object3D.position = model.object3D.position;
+      }
+      if (isMarker && index === 1) {
+        sky01.object3D.position = model.object3D.position;
+      }
+    }
   });
 }
 
