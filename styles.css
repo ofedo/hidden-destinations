@@ -12,6 +12,12 @@ h1, h3, p, li, dt, dd, a {
   padding: 5px 30px;
 }
 
+@media screen and (min-width: 768px) {
+  h1, h3, p, li, dt, dd, a {
+    padding: 15px 60px;
+  }
+}
+
 h1 {
   font-size: 26px;
   padding-top: 50px;
@@ -46,6 +52,7 @@ ul, dl {
 }
 
 .arrow {
+  position: relative;
   display: inline-block;
   transform: rotate(90deg);
   vertical-align: middle;
@@ -61,7 +68,7 @@ ul, dl {
 
 @keyframes rotateArrow {
   0% {
-    transform: rotateX(0deg) rotateZ(90deg) ;
+    transform: rotateX(0deg) rotateZ(90deg);
   }
 
   100% {
@@ -74,8 +81,8 @@ ul, dl {
   background-color: #000000;
   left: 0px;
   position: absolute;
-  top: 2px;
-  height: 20px;
+  top: 7px;
+  height: 16px;
   opacity: 0.5;
   width: 1px;
   z-index: -1;
@@ -84,7 +91,7 @@ ul, dl {
 
 .arrow:hover,
 .arrow:focus {
-  filter: contrast(0) brightness(2) drop-shadow(0px 0px 10px #20b2aa);
+  filter: contrast(0) brightness(2) drop-shadow(0px 0px 4px #20b2aa);
 }
 
 .arrow+.arrow {
@@ -96,6 +103,7 @@ ul, dl {
 }
 
 .symbol {
+  position: relative;
   display: inline-block;
   vertical-align: middle;
   margin: 0 20px;
@@ -118,31 +126,58 @@ ul, dl {
 
 .symbol-active {
   cursor: pointer;
-  transition: filter 1s linear;
+  transition: filter 0.5s linear;
+  filter: contrast(0) brightness(2) drop-shadow(0px 0px 4px #20b2aa);
 }
 
-.symbol-active::before {
+@media screen and (min-width: 768px) {
+  .symbol-active {
+    filter: none;
+  }
+
+  .symbol-active:hover,
+  .symbol-active:focus {
+    filter: contrast(0) brightness(2) drop-shadow(0px 0px 4px #20b2aa);
+  }
+}
+
+.symbol-active:focus {
+  animation-duration: 3s;
+}
+
+.symbol::before {
   content: '';
-  /* background-color: #000000; */
+  background-position: top center;
+  background-repeat: no-repeat;
   background-size: 30px;
   background-image: url(assets/svg/symbol1c.svg);
   left: 0px;
   position: absolute;
   top: 0px;
   height: 50px;
-  opacity: 0.5;
   width: 30px;
+  opacity: 0.5;
   z-index: -1;
   transform: rotateY(10deg) translateZ(1px);
 }
 
-.symbol-active:hover,
-.symbol-active:focus {
-  filter: contrast(0) brightness(2) drop-shadow(0px 0px 16px #20b2aa);
+.symbol1::before {
+  background-image: url(assets/svg/symbol1c.svg);
 }
 
-.symbol-active:focus {
-  animation-duration: 3s;
+.symbol2::before {
+  background-size: 10px;
+  background-image: url(assets/svg/symbol2c.svg);
+  height: 30px;
+  width: 10px;
+}
+
+.symbol9::before {
+  background-size: 10px;
+  background-image: url(assets/svg/symbol9c.svg);
+  height: 35px;
+  width: 10px;
+  top: 0px;
 }
 
 .symbol+.symbol {
